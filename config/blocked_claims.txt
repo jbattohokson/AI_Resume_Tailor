@@ -1,0 +1,15 @@
+# Skills or experience you can't defend in an interview.
+# The tailor rejects any output that adds one of these when your resume doesn't already list it.
+# Edit this list to match your own background.
+Salesforce
+ZoomInfo
+Power BI
+Excel
+Apache Airflow
+Airflow
+Snowflake
+Databricks
+B2B
+SaaS
+enterprise
+fintech

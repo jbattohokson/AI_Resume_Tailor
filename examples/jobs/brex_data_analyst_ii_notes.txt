@@ -1,0 +1,1 @@
+From the posting itself: Brex's Data team wants business teams to monitor their own performance through self-service tools, and it calls out data quality checks on the datasets behind dashboards. Recurring reports are being automated in Python.

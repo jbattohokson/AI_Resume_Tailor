@@ -1,0 +1,9 @@
+Acme Analytics is hiring a Junior Data Analyst.
+
+You will build dashboards in Tableau, write SQL against our warehouse, and partner with Sales on pipeline reporting.
+
+Requirements:
+- 0 to 2 years of experience with SQL and Python
+- Experience with data visualization (Tableau preferred)
+- Clear communication with non-technical stakeholders
+- Nice to have: dbt, Salesforce reporting

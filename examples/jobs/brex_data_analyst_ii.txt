@@ -1,0 +1,16 @@
+Brex, Data Analyst II (San Francisco, hybrid)
+Source: https://www.brex.com/careers/8463696002?gh_jid=8463696002 (public posting, retrieved 2026-10-20)
+Summary written for this demo; read the original posting for the full text.
+
+Brex sells corporate cards, banking and spend management software to companies. Its Data team builds insights, models and data infrastructure for Sales, Marketing, Product, Engineering and Operations.
+
+The role:
+- Build business intelligence dashboards in Looker and/or Hex that tell a clear story
+- Run ad-hoc analyses and deep dives on business questions and recommend actions from the data
+- Create self-service data tools so business teams can track their own performance
+- Work with Data Scientists and Data Engineers on data sources, pipelines and analytical data models behind reports
+- Set up and maintain data quality checks on the datasets that feed dashboards
+- Partner with Sales, Operations, Product and Finance on reporting for planning
+- Automate recurring analyses and reports in Python
+
+Asks for 3+ years in data analytics or a related role.

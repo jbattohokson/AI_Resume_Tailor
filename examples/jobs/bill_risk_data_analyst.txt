@@ -1,0 +1,12 @@
+BILL, Risk Data Analyst (United States, remote-first)
+Source: https://www.bill.com/job?6208561004&gh_jid=6208561004 (public posting, retrieved 2026-10-20)
+Summary written for this demo; read the original posting for the full text.
+
+BILL makes accounts payable, receivable and spend software for small and mid-size businesses. This role sits on the Risk Portfolio Management and Strategic Programs team, which runs programs across credit, fraud and reputational risk.
+
+The role:
+- Own strategic project plans and use statistical and analytical methods on project data to spot performance patterns and early risk signals
+- Build operating frameworks for risk initiatives and try automation and AI-assisted tools, such as LLM copilots, to cut manual work
+- Design dashboards in Tableau, AWS QuickSight or similar tools for sponsors and leadership
+- Manage third-party vendors: track performance metrics, evaluate them, monitor ROI and watch budget lines
+- Keep cross-functional partners aligned on priorities

@@ -1,0 +1,21 @@
+# Capitalized words the new-term check should never flag.
+I
+A
+An
+The
+And
+Or
+CHANGE
+LOG
+SUMMARY
+EDUCATION
+SKILLS
+EXPERIENCE
+PROJECTS
+Dear
+Hiring
+Team
+Manager
+Sincerely
+Best
+Regards
