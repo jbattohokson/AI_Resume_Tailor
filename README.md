@@ -89,11 +89,14 @@ The tests swap in a scripted fake model, so they run offline in under a second. 
 
 ## Testing status (2026-10-20)
 
-- `pytest`: 13 passed, run 3 times with identical results.
-- Not tested here: live runs against Ollama or Claude on the new real postings. The tests use a scripted fake model, so they prove the guards and retry logic, not draft quality.
+- **pytest:** 17 passed, run 3 times with identical results. A scripted fake model stands in for the LLM, so the tests run offline in about a second. They cover each guard, a clean first-try pass, a fabricated draft caught and fixed on retry, the flagged fallback, and three failures first seen in real runs (a change log claiming an edit the resume doesn't contain, "leveraging" slipping past the banned list, `[Company Name]` placeholders).
+- **Real runs:** 5 runs with `qwen2.5:7b` on the three real postings, saved unedited in `examples/sample_outputs/` with a README scoring each one. All 3 resumes passed on the first attempt (3 to 4.5 minutes each on a 2-vCPU machine with no GPU). Both cover letters were FLAGGED after 3 attempts, for running 11 sentences and, in one, inventing a "50%" improvement. The model edits very conservatively: 1 real edit in 3 resumes. Its change logs were inaccurate in 2 of 3.
+- **Not tested:** Claude or other paid models, and whether tailored resumes get more interviews.
 
 ## Limits
 
+- The change-log check only reads entries written as `New: "..."`. A log in another format, or one that misdescribes an edit without quoting missing text, gets through.
+- Generic openings other than "I am writing..." (for example "I am excited to apply") and letters that never name the company aren't caught.
 - The new-names check skips words at the start of a line or sentence, so a made-up tool used as a bullet's first word gets past it. Blocked claims and number checks still apply.
 - The cover letter can only be as specific as your notes file. The agents don't browse the web.
 - Local 7B models are slower and make more first-draft mistakes than Claude. Expect more retries.
