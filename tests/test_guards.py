@@ -80,3 +80,19 @@ def test_cover_letter_length_and_opening_rules():
     short = "I am writing to apply. I like data. Thanks."
     problems = " ".join(check_cover_letter(short, RESUME, JD, "").problems)
     assert "7 to 9" in problems and "I am writing" in problems
+
+
+def test_banned_word_forms_and_placeholders_are_caught():
+    # Both slipped through in a real qwen2.5:7b cover letter for the BILL posting.
+    letter = GOOD_LETTER.replace("That is the kind of work I want to do.",
+                                 "I would enjoy leveraging that at [Company Name].")
+    problems = " ".join(check_cover_letter(letter, RESUME, JD, "").problems)
+    assert "leverage" in problems and "[Company Name]" in problems
+
+
+def test_stem_matching_does_not_flag_unrelated_words():
+    from tailor.guards import banned_words_in
+    assert banned_words_in("I fostered a dynamic team") == ["foster", "dynamic"]
+    assert banned_words_in("Leverett Street") == []  # shares letters but not the stem "leverag"
+    # Accepted trade-off: other forms of a banned word are flagged too, even literal ones.
+    assert banned_words_in("a landscaping crew") == ["landscape"]

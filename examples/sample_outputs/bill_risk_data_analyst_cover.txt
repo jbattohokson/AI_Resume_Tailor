@@ -1,0 +1,10 @@
+Dear Hiring Manager,
+
+I am excited to apply for the Data Analyst position at [Company Name]. My background in building data pipelines and my experience in turning messy data into actionable insights align well with the role's requirements. At Bayside Motors, I closed 14 vehicle sales per month on average by qualifying leads in DealerSocket CRM, demonstrating my ability to streamline processes and drive results. Additionally, I reduced follow-up time from 3 days to 1 day by building a call-back tracker in Google Sheets, further showcasing my efficiency in data management.
+
+In my project, Retail Margin Analysis, I utilized Python, SQL, and Tableau to analyze 84 weeks of retail data and found a -1.5% gross margin on US bike sales. This project not only honed my technical skills but also underscored my commitment to uncovering actionable insights. I am particularly interested in leveraging automation and AI-assisted tools, such as LLM copilots, to cut manual work and enhance our risk initiatives.
+
+I am eager to discuss how my skills and experiences can contribute to [Company Name]. Thank you for considering my application. I look forward to the opportunity to speak with you about how I can support your team.
+
+Sincerely,
+Alex Rivera

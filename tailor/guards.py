@@ -73,9 +73,25 @@ def new_capitalized_terms(output: str, *sources: str) -> set[str]:
     return found
 
 
+def banned_pattern(word: str) -> str:
+    """Whole-word match that also catches other forms of a single word.
+
+    "leverage" must also catch "leveraging" and "leveraged" (a real run slipped "leveraging"
+    past an exact-word check), so single words match on their stem. Phrases stay exact.
+    """
+    w = word.lower()
+    if " " in w or "-" in w or len(w) < 5:
+        return rf"\b{re.escape(w)}\b"
+    stem = w[:-1] if w.endswith("e") else w
+    return rf"\b{re.escape(stem)}\w*"
+
+
 def banned_words_in(text: str) -> list[str]:
     lowered = text.lower()
-    return [w for w in _load_list("banned_words.txt") if re.search(rf"\b{re.escape(w.lower())}\b", lowered)]
+    return [w for w in _load_list("banned_words.txt") if re.search(banned_pattern(w), lowered)]
+
+
+PLACEHOLDER_RE = re.compile(r"\[[^\]\n]{2,40}\]")
 
 
 def blocked_claims_in(output: str, resume: str) -> list[str]:
@@ -96,6 +112,9 @@ def check_style(text: str, report: GuardReport) -> None:
     banned = banned_words_in(text)
     if banned:
         report.problems.append(f"Banned words used: {', '.join(banned)}.")
+    placeholders = sorted(set(PLACEHOLDER_RE.findall(text)))
+    if placeholders:
+        report.problems.append(f"Fill in or remove placeholders: {', '.join(placeholders)}.")
 
 
 def _squash(text: str) -> str:
