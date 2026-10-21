@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from tailor.guards import check_cover_letter, check_resume, new_capitalized_terms, new_numbers
+from tailor.guards import SENTENCE_RE, check_cover_letter, check_resume, new_capitalized_terms, new_numbers
 
 EXAMPLES = Path(__file__).resolve().parent.parent / "examples"
 RESUME = (EXAMPLES / "sample_resume.txt").read_text()
@@ -96,3 +96,6 @@ def test_stem_matching_does_not_flag_unrelated_words():
     assert banned_words_in("Leverett Street") == []  # shares letters but not the stem "leverag"
     # Accepted trade-off: other forms of a banned word are flagged too, even literal ones.
     assert banned_words_in("a landscaping crew") == ["landscape"]
+
+def test_decimal_does_not_split_a_sentence():
+    assert len(SENTENCE_RE.findall("I found a -1.5% margin. Could we talk?")) == 2

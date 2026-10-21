@@ -1,5 +1,5 @@
 """End-to-end crew runs against a scripted model: wiring, retries and the flagged fallback."""
-from tailor.crew import MAX_RETRIES, tailor_resume, write_cover_letter
+from tailor.crew import max_retries, tailor_resume, write_cover_letter
 from tests.test_guards import GOOD_LETTER, JD, RESUME
 
 ANALYSIS = "Supported: SQL, Tableau. Unsupported: dbt, Salesforce."
@@ -21,9 +21,9 @@ def test_fabrication_triggers_retry_with_feedback(scripted):
 
 
 def test_gives_up_and_flags_after_max_retries(scripted):
-    replies = [ANALYSIS, FABRICATED] * (MAX_RETRIES + 1)
+    replies = [ANALYSIS, FABRICATED] * (max_retries() + 1)
     result = tailor_resume(RESUME, JD, "", stub=scripted(*replies))
-    assert not result.report.ok and result.attempts == MAX_RETRIES + 1
+    assert not result.report.ok and result.attempts == max_retries() + 1
 
 
 def test_cover_letter_crew(scripted):

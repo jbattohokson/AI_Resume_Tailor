@@ -9,8 +9,8 @@ Nothing here was edited. The point is to show what a free 7B model actually does
 | `brex_data_analyst_ii_resume.txt` | Passed, 1 attempt | 4m21s | One real edit: "exports 4 Tableau views" became "exports 4 dashboards", matching the posting. Everything else unchanged. |
 | `bill_risk_data_analyst_resume.txt` | Passed, 1 attempt | 3m13s | Swapped the order of two project bullets and reworded one ("Found a -1.5% gross margin..." became "Analyzed... to find a -1.5% gross margin"). Its change log is wrong: it says a bullet was "added" when it was reordered, and it doesn't mention the rewording. |
 | `bill_business_development_rep_resume.txt` | Passed, 1 attempt | 4m07s | No edits. It correctly didn't add Salesforce or ZoomInfo, which the posting asks for but the resume doesn't list (both are on `config/blocked_claims.txt`). Its change log wrongly says the bullets already contain "prospecting" and "KPIs". |
-| `brex_data_analyst_ii_cover.txt` | **FLAGGED** after 3 attempts | 6m17s | 11 sentences (limit 7 to 9) and an invented "50%" improvement. The resume says follow-up went from 3 days to 1 day, which is a 67% cut, so the number was both made up and wrong. |
-| `bill_risk_data_analyst_cover.txt` | **FLAGGED** after 3 attempts | 5m40s | 11 sentences. It also used "leveraging" and left "[Company Name]" placeholders, which the guards at the time missed. Both checks were added after this run; re-checked now, it fails on all three. |
+| `brex_data_analyst_ii_cover.txt` | **FLAGGED** after 3 attempts | 6m17s | 10 sentences (limit 7 to 9; the guard at run time counted 11 because it split "-1.5%" at the decimal, fixed since) and an invented "50%" improvement. The resume says follow-up went from 3 days to 1 day, which is a 67% cut, so the number was both made up and wrong. |
+| `bill_risk_data_analyst_cover.txt` | **FLAGGED** after 3 attempts | 5m40s | 10 sentences (counted as 11 at run time, same decimal bug). It also used "leveraging" and left "[Company Name]" placeholders, which the guards at the time missed. Both checks were added after this run; re-checked now, it fails on all three. |
 
 ## What these runs changed in the code
 

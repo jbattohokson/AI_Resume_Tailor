@@ -15,7 +15,11 @@ from tailor.guards import GuardReport, check_cover_letter, check_resume
 from tailor.llm import get_llm
 
 PROTOCOL = (Path(__file__).resolve().parent.parent / "config" / "protocol.md").read_text(encoding="utf-8")
-MAX_RETRIES = int(os.getenv("TAILOR_MAX_RETRIES", "2"))
+
+
+def max_retries() -> int:
+    # Read at call time: the CLI loads .env after this module is imported.
+    return int(os.getenv("TAILOR_MAX_RETRIES", "2"))
 
 
 @dataclass
@@ -94,13 +98,14 @@ def build_cover_letter_crew(llm: BaseLLM, feedback: str = "") -> Crew:
 
 def _run(build, check, inputs: dict, llm: BaseLLM) -> TailorResult:
     feedback, text, report = "", "", GuardReport(["Model never ran."])
-    for attempt in range(1, MAX_RETRIES + 2):
+    retries = max_retries()
+    for attempt in range(1, retries + 2):
         text = str(build(llm, feedback).kickoff(inputs=inputs).raw).strip()
         report = check(text)
         if report.ok:
             return TailorResult(text, report, attempt)
         feedback = report.as_feedback()
-    return TailorResult(text, report, MAX_RETRIES + 1)
+    return TailorResult(text, report, retries + 1)
 
 
 def tailor_resume(resume: str, jd: str, buzzwords: str = "", stub: BaseLLM | None = None) -> TailorResult:

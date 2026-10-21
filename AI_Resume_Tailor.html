@@ -85,7 +85,7 @@
   <p>Free local models are good at rewording and bad at not making things up. Instead of asking a second AI to review the first one, this tool wraps a CrewAI crew (job description analyst, resume editor, cover letter writer) in plain Python checks. A draft that invents a number, adds a skill you can't defend, slips in a banned word or misses the cover letter's 7-to-9-sentence shape goes back to the model with the exact problems listed. After two failed retries it's saved marked FLAGGED instead of passing quietly.</p>
   <p>I ran it five times with qwen2.5 (7B) on three real postings. All three resumes passed on the first attempt. Both cover letters were flagged after three attempts, one for inventing a "50%" improvement. Those runs also exposed three gaps in my own checks, which I fixed and covered with tests.</p>
 </section>
-<div class="kpi-strip"><div class="kpi"><div class="num good">3 / 3</div><div class="label">Resumes passed every check on attempt 1</div></div><div class="kpi"><div class="num warn">2 / 2</div><div class="label">Cover letters flagged, not passed off as done</div></div><div class="kpi"><div class="num blue">3</div><div class="label">Guard gaps found in real runs and fixed</div></div><div class="kpi"><div class="num blue">17</div><div class="label">Offline tests, no model needed</div></div><div class="kpi"><div class="num amber">3 to 6 min</div><div class="label">Per draft on 2 CPUs, $0 model cost</div></div></div>
+<div class="kpi-strip"><div class="kpi"><div class="num good">3 / 3</div><div class="label">Resumes passed every check on attempt 1</div></div><div class="kpi"><div class="num warn">2 / 2</div><div class="label">Cover letters flagged, not passed off as done</div></div><div class="kpi"><div class="num blue">3</div><div class="label">Guard gaps found in real runs and fixed</div></div><div class="kpi"><div class="num blue">18</div><div class="label">Offline tests, no model needed</div></div><div class="kpi"><div class="num amber">3 to 6 min</div><div class="label">Per draft on 2 CPUs, $0 model cost</div></div></div>
 
 <section id="findings" class="section">
   <p class="section-label">Real Runs</p>
@@ -94,8 +94,8 @@
   <tr><td>Brex, Data Analyst II</td><td>Resume</td><td><span class="pos">Passed, 1 try</span></td><td>One edit: "exports 4 Tableau views" → "exports 4 dashboards", matching the posting</td></tr>
   <tr><td>BILL, Risk Data Analyst</td><td>Resume</td><td><span class="pos">Passed, 1 try</span></td><td>Reordered and reworded a bullet; its change log misdescribed the edit</td></tr>
   <tr><td>BILL, Business Development Rep</td><td>Resume</td><td><span class="pos">Passed, 1 try</span></td><td>No edits, and correctly didn't add Salesforce or ZoomInfo, which the candidate never listed</td></tr>
-  <tr><td>Brex, Data Analyst II</td><td>Cover letter</td><td><span class="neg">Flagged, 3 tries</span></td><td>11 sentences; invented "50%" (the real 3-days-to-1 cut is 67%)</td></tr>
-  <tr><td>BILL, Risk Data Analyst</td><td>Cover letter</td><td><span class="neg">Flagged, 3 tries</span></td><td>11 sentences, "leveraging", and "[Company Name]" left in</td></tr>
+  <tr><td>Brex, Data Analyst II</td><td>Cover letter</td><td><span class="neg">Flagged, 3 tries</span></td><td>10 sentences; invented "50%" (the real 3-days-to-1 cut is 67%)</td></tr>
+  <tr><td>BILL, Risk Data Analyst</td><td>Cover letter</td><td><span class="neg">Flagged, 3 tries</span></td><td>10 sentences, "leveraging", and "[Company Name]" left in</td></tr>
   </tbody></table></div>
 
   <div class="finding"><div class="finding-header"><span class="finding-number">01</span><span class="finding-title">The guards kept an invented metric from passing</span></div><div class="finding-body">
@@ -150,7 +150,7 @@ Cover mode:    Hook Finder ──> Letter Writer ──> guards ──> output/&
   <tr><td>Framework</td><td>CrewAI, sequential crews, one per mode</td></tr>
   <tr><td>Model</td><td>Ollama qwen2.5:7b by default (free, local); Claude via one env var</td></tr>
   <tr><td>Inputs</td><td>Real public postings (Brex, BILL) summarized with source links; a fictional resume</td></tr>
-  <tr><td>Testing</td><td>17 offline pytest tests with a scripted fake model; 5 real runs saved unedited</td></tr>
+  <tr><td>Testing</td><td>18 offline pytest tests with a scripted fake model; 5 real runs saved unedited</td></tr>
   <tr><td>Tools</td><td>Python, CrewAI, Ollama, pytest</td></tr>
   </tbody></table></div>
 </section>

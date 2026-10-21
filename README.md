@@ -92,8 +92,8 @@ The tests swap in a scripted fake model, so they run offline in under a second. 
 
 ## Testing status (2026-10-20)
 
-- **pytest:** 17 passed, run 3 times with identical results. A scripted fake model stands in for the LLM, so the tests run offline in about a second. They cover each guard, a clean first-try pass, a fabricated draft caught and fixed on retry, the flagged fallback, and three failures first seen in real runs (a change log claiming an edit the resume doesn't contain, "leveraging" slipping past the banned list, `[Company Name]` placeholders).
-- **Real runs:** 5 runs with `qwen2.5:7b` on the three real postings, saved unedited in `examples/sample_outputs/` with a README scoring each one. All 3 resumes passed on the first attempt (3 to 4.5 minutes each on a 2-vCPU machine with no GPU). Both cover letters were FLAGGED after 3 attempts, for running 11 sentences and, in one, inventing a "50%" improvement. The model edits very conservatively: 1 real edit in 3 resumes. Its change logs were inaccurate in 2 of 3.
+- **pytest:** 18 passed, run 3 times with identical results. A scripted fake model stands in for the LLM, so the tests run offline in about a second. They cover each guard, a clean first-try pass, a fabricated draft caught and fixed on retry, the flagged fallback, and three failures first seen in real runs (a change log claiming an edit the resume doesn't contain, "leveraging" slipping past the banned list, `[Company Name]` placeholders), plus a code-review fix so decimals like "1.5%" don't split a sentence in two.
+- **Real runs:** 5 runs with `qwen2.5:7b` on the three real postings, saved unedited in `examples/sample_outputs/` with a README scoring each one. All 3 resumes passed on the first attempt (3 to 4.5 minutes each on a 2-vCPU machine with no GPU). Both cover letters were FLAGGED after 3 attempts, for running 10 sentences (limit 9) and, in one, inventing a "50%" improvement. The model edits very conservatively: 1 real edit in 3 resumes. Its change logs were inaccurate in 2 of 3.
 - **Not tested:** Claude or other paid models, and whether tailored resumes get more interviews.
 
 ## Limits
