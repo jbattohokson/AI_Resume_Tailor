@@ -99,3 +99,39 @@ def test_stem_matching_does_not_flag_unrelated_words():
 
 def test_decimal_does_not_split_a_sentence():
     assert len(SENTENCE_RE.findall("I found a -1.5% margin. Could we talk?")) == 2
+
+
+# Audit 2026-10-21: gaps found by feeding the guards adversarial drafts
+
+
+def _letter(*middle):
+    opening = "Acme is rebuilding how dealers price inventory."
+    closing = ["I work well with finance teams.", "I like hard problems.",
+               "I would value a conversation.", "Thank you for your time."]
+    return " ".join([opening, *middle, *closing])
+
+
+def test_cover_letter_blocked_claim_is_caught():
+    letter = _letter("I ran Salesforce reporting for a sales team.", "I keep dashboards simple.")
+    report = check_cover_letter(letter, RESUME, JD, "")
+    assert any("Salesforce" in p for p in report.problems), report.problems
+
+
+def test_cover_letter_new_tool_is_caught():
+    letter = _letter("I built pipelines in Airbyte every week.", "I keep dashboards simple.")
+    report = check_cover_letter(letter, RESUME, JD, "")
+    assert any("Airbyte" in p for p in report.problems), report.problems
+
+
+def test_spelled_out_quantities_are_caught():
+    letter = _letter("I doubled the team's reporting speed.", "Accuracy rose by fifty percent.")
+    problems = " ".join(check_cover_letter(letter, RESUME, JD, "").problems)
+    assert "doubled" in problems and "fifty percent" in problems
+    edited = RESUME.replace("Built a 3-step pipeline", "Built a 3-step pipeline that tripled throughput")
+    assert not check_resume(edited + "\nCHANGE LOG\n- x", RESUME, JD, "").ok
+
+
+def test_new_name_matching_is_whole_word():
+    source = "Built dashboards in JavaScript."
+    assert "Java" in new_capitalized_terms("Built dashboards in Java too.", source)
+    assert "JavaScript" not in new_capitalized_terms("Built dashboards in JavaScript.", source)

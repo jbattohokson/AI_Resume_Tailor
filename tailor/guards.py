@@ -57,6 +57,31 @@ def new_numbers(output: str, *sources: str) -> set[str]:
     return numbers_in(output) - allowed
 
 
+# Quantities written as words: "doubled revenue", "a threefold increase", "fifty percent".
+_NUMBER_WORDS = ("one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|fifteen|twenty|"
+                 "thirty|forty|fifty|sixty|seventy|eighty|ninety|hundred|thousand|million|billion")
+WORD_QUANTITY_RE = re.compile(
+    rf"\b(?:doubl\w*|tripl\w*|quadrupl\w*|halv\w*|\w+fold|(?:{_NUMBER_WORDS})(?:[\s-]+(?:{_NUMBER_WORDS}))*"
+    rf"[\s-]+(?:percent|percentage points?|times|x)\b)",
+    re.I,
+)
+
+
+def new_word_quantities(output: str, *sources: str) -> set[str]:
+    """Quantities spelled out in words that none of the sources contain.
+
+    AUDITED 2026-10-21: the number check only saw digits, so "doubled revenue" or
+    "grew fifty percent" passed in both resumes and cover letters.
+    """
+    source_text = " ".join(sources).lower()
+    return {m.group().lower() for m in WORD_QUANTITY_RE.finditer(output) if m.group().lower() not in source_text}
+
+
+def _in_text(term: str, text: str) -> bool:
+    # Whole-token match. A plain substring test let "Java" through because the resume said "JavaScript".
+    return re.search(rf"(?<![a-z0-9]){re.escape(term)}(?![a-z0-9])", text) is not None
+
+
 def new_capitalized_terms(output: str, *sources: str) -> set[str]:
     """Capitalized terms (tools, companies, titles) the model introduced on its own."""
     source_text = " ".join(sources).lower()
@@ -64,7 +89,7 @@ def new_capitalized_terms(output: str, *sources: str) -> set[str]:
     found = set()
     for m in CAPITALIZED_RE.finditer(output):
         term = m.group()
-        if term.lower() in ignore or term.lower() in source_text:
+        if term.lower() in ignore or _in_text(term.lower(), source_text):
             continue
         # Verbs that open a bullet or sentence are capitalized by grammar, not because they're names.
         before = output[: m.start()].rstrip(" \t")
@@ -138,7 +163,7 @@ def check_resume(output: str, resume: str, jd: str, buzzwords: str) -> GuardRepo
     if not change_log.strip():
         report.problems.append("Missing a 'CHANGE LOG' section after the resume.")
 
-    invented = new_numbers(resume_part, resume)
+    invented = new_numbers(resume_part, resume) | new_word_quantities(resume_part, resume)
     if invented:
         report.problems.append(
             f"Numbers not in the original resume: {', '.join(sorted(invented))}. Never add or change metrics."
@@ -172,8 +197,18 @@ def check_cover_letter(output: str, resume: str, jd: str, notes: str) -> GuardRe
         report.problems.append("Don't open with 'I am writing...'. Open with the company's work.")
     if "!" in body:
         report.problems.append("No exclamation points.")
-    invented = new_numbers(body, resume, jd, notes)
+    invented = new_numbers(body, resume, jd, notes) | new_word_quantities(body, resume, jd, notes)
     if invented:
         report.problems.append(f"Numbers not found in your resume, the JD or your notes: {', '.join(sorted(invented))}.")
+    # AUDITED 2026-10-21: cover letters skipped these two checks, so a letter could claim a
+    # skill on the "can't defend" list or a tool you've never used and still pass.
+    blocked = blocked_claims_in(body, resume)
+    if blocked:
+        report.problems.append(f"Claims skills you can't defend: {', '.join(blocked)}. Remove them.")
+    new_terms = new_capitalized_terms(body, resume, jd, notes)
+    if new_terms:
+        report.problems.append(
+            f"New names or tools not in your resume, the JD or your notes: {', '.join(sorted(new_terms))}."
+        )
     check_style(body, report)
     return report

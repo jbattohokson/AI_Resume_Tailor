@@ -13,9 +13,9 @@ Small free models are good at rewording and bad at not making things up. A secon
 
 | Check | What it catches |
 |---|---|
-| New numbers | Any figure in the draft that isn't in your original resume |
-| Blocked claims | Skills on your "can't defend this" list (`config/blocked_claims.txt`) that the draft adds |
-| New names | Tools or companies that appear mid-sentence and aren't in your resume or the job description |
+| New numbers | Any figure in the draft that isn't in your original resume, including spelled-out ones ("doubled", "fifty percent", "threefold") |
+| Blocked claims | Skills on your "can't defend this" list (`config/blocked_claims.txt`) that the draft adds, in the resume or the cover letter |
+| New names | Tools or companies that appear mid-sentence and aren't in your resume, the job description or your notes (whole-word match, so "Java" isn't excused by "JavaScript") |
 | Style | Em dashes, code fences, banned words (`config/banned_words.txt`) |
 | Cover letter shape | 7 to 9 sentences, no "I am writing to...", no exclamation points |
 
@@ -92,9 +92,19 @@ The tests swap in a scripted fake model, so they run offline in under a second. 
 
 ## Testing status (2026-10-20)
 
-- **pytest:** 18 passed, run 3 times with identical results. A scripted fake model stands in for the LLM, so the tests run offline in about a second. They cover each guard, a clean first-try pass, a fabricated draft caught and fixed on retry, the flagged fallback, and three failures first seen in real runs (a change log claiming an edit the resume doesn't contain, "leveraging" slipping past the banned list, `[Company Name]` placeholders), plus a code-review fix so decimals like "1.5%" don't split a sentence in two.
+- **pytest:** 18 passed, run 3 times with identical results (22 after the 2026-10-21 audit). A scripted fake model stands in for the LLM, so the tests run offline in about a second. They cover each guard, a clean first-try pass, a fabricated draft caught and fixed on retry, the flagged fallback, and three failures first seen in real runs (a change log claiming an edit the resume doesn't contain, "leveraging" slipping past the banned list, `[Company Name]` placeholders), plus a code-review fix so decimals like "1.5%" don't split a sentence in two.
 - **Real runs:** 5 runs with `qwen2.5:7b` on the three real postings, saved unedited in `examples/sample_outputs/` with a README scoring each one. All 3 resumes passed on the first attempt (3 to 4.5 minutes each on a 2-vCPU machine with no GPU). Both cover letters were FLAGGED after 3 attempts, for running 10 sentences (limit 9) and, in one, inventing a "50%" improvement. The model edits very conservatively: 1 real edit in 3 resumes. Its change logs were inaccurate in 2 of 3.
 - **Not tested:** Claude or other paid models, and whether tailored resumes get more interviews.
+
+## Audit 2026-10-21
+
+Feeding the guards adversarial drafts found three gaps, now fixed and covered by tests (22 pass):
+
+- **Cover letters skipped the claim checks.** Only resumes ran the blocked-claims and new-names checks, so a letter saying "I ran Salesforce reporting" (a blocked claim) passed with zero problems.
+- **Spelled-out numbers passed.** "Doubled revenue", "tripled throughput" and "fifty percent" weren't caught, because the number check only saw digits.
+- **The new-names check matched substrings.** A made-up "Java" passed because the resume said "JavaScript".
+
+Re-checking the committed sample outputs under the stricter guards: the three real resumes still pass (no new false positives), and the two cover letters are still flagged for the same reasons as before.
 
 ## Limits
 
