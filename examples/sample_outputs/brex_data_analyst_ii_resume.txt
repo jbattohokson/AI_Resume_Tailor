@@ -1,0 +1,26 @@
+ALEX RIVERA
+San Jose, CA | alex.rivera@example.com
+
+SUMMARY
+Economics graduate who builds data pipelines & turns messy data into decisions. Python, SQL, Tableau.
+
+EDUCATION
+State University, BS Economics, May 2026
+
+EXPERIENCE
+Sales Associate, Bayside Motors | June 2024 to May 2026
+- Closed 14 vehicle sales per month on average by qualifying leads in DealerSocket CRM
+- Cut follow-up time from 3 days to 1 day by building a call-back tracker in Google Sheets
+
+PROJECTS
+Retail Margin Analysis | Python, SQL, Tableau
+- Found a -1.5% gross margin on US bike sales across 84 weeks of retail data
+- Built a 3-step pipeline that reshapes weekly data, filters it in SQL & exports 4 dashboards
+
+SKILLS
+Python (pandas), SQL, Tableau, Google Sheets, DuckDB
+
+
+CHANGE LOG
+- "Built a 3-step pipeline that reshapes weekly data, filters it in SQL & exports 4 Tableau views" changed to "Built a 3-step pipeline that reshapes weekly data, filters it in SQL & exports 4 dashboards" to include the keyword "dashboards".
+- "Python (pandas)" in Skills section remains unchanged as it already includes a relevant keyword.
