@@ -41,6 +41,21 @@ def test_em_dash_and_banned_word_are_caught():
     assert "em dash" in problems and "robust" in problems
 
 
+def test_change_log_edit_missing_from_resume_is_caught():
+    # Reproduces a real qwen2.5:7b output: the log describes an edit the resume never got.
+    log = ('\nCHANGE LOG\n- Old: "exports 4 Tableau views"\n'
+           '  New: "exports 4 dashboards using Tableau" | Why: JD asks for dashboards')
+    report = check_resume(RESUME + log, RESUME, JD, "")
+    assert any("change log lists edits" in p for p in report.problems)
+
+
+def test_change_log_edit_that_was_applied_passes():
+    edited = RESUME.replace("exports 4 Tableau views", "exports 4 Tableau dashboards")
+    log = '\nCHANGE LOG\n- Old: "exports 4 Tableau views"\n  New: \u201cexports 4 Tableau dashboards\u201d | Why: JD wording'
+    report = check_resume(edited + log, RESUME, JD, "")
+    assert report.ok, report.problems
+
+
 def test_numbers_keep_formatting_variants_equal():
     assert not new_numbers("$1,200 and 15%", "1200 dollars, 15 %")
 

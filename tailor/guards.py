@@ -15,6 +15,8 @@ CONFIG_DIR = Path(__file__).resolve().parent.parent / "config"
 NUMBER_RE = re.compile(r"\$?\d[\d,]*(?:\.\d+)?\s?(?:%|[kKmMbB]\b|x\b)?")
 SENTENCE_RE = re.compile(r"[^.!?]+[.!?]+")
 CAPITALIZED_RE = re.compile(r"\b[A-Z][A-Za-z0-9+#.&-]*[A-Za-z0-9+#]\b")
+# Change log entries look like:  New: "the edited bullet"  (straight or curly quotes)
+LOGGED_NEW_RE = re.compile(r'New:\s*["\u201c](.+?)["\u201d]', re.S)
 
 
 def _load_list(name: str) -> list[str]:
@@ -96,6 +98,20 @@ def check_style(text: str, report: GuardReport) -> None:
         report.problems.append(f"Banned words used: {', '.join(banned)}.")
 
 
+def _squash(text: str) -> str:
+    return " ".join(text.split()).lower()
+
+
+def unapplied_log_edits(resume_part: str, change_log: str) -> list[str]:
+    """Edits the change log claims that don't appear in the resume text.
+
+    Found in a real run: a 7B model logged an edit ("...4 dashboards using Tableau") and then
+    returned the original bullet unchanged, so the log described a resume that didn't exist.
+    """
+    body = _squash(resume_part)
+    return [new for new in LOGGED_NEW_RE.findall(change_log) if _squash(new) not in body]
+
+
 def check_resume(output: str, resume: str, jd: str, buzzwords: str) -> GuardReport:
     report = GuardReport()
     resume_part, _, change_log = output.partition("CHANGE LOG")
@@ -114,6 +130,13 @@ def check_resume(output: str, resume: str, jd: str, buzzwords: str) -> GuardRepo
     if new_terms:
         report.problems.append(
             f"New names or tools not in the resume or job description: {', '.join(sorted(new_terms))}."
+        )
+    missing_edits = unapplied_log_edits(resume_part, change_log)
+    if missing_edits:
+        report.problems.append(
+            "The change log lists edits that aren't in the resume: "
+            + "; ".join(f'"{m[:80]}"' for m in missing_edits)
+            + ". Apply each edit to the resume text, or drop it from the log."
         )
     check_style(resume_part, report)
     return report
