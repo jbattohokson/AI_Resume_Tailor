@@ -89,7 +89,7 @@ The tests swap in a scripted fake model, so they run offline in under a second. 
 
 ## Testing status (2026-10-20)
 
-- `pytest`: 13 passed, run 3 times with identical results.
+- `pytest`: 14 passed.
 - Not tested here: live runs against Ollama or Claude on the new real postings. The tests use a scripted fake model, so they prove the guards and retry logic, not draft quality.
 
 ## Limits

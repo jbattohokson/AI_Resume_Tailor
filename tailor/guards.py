@@ -13,7 +13,8 @@ from pathlib import Path
 CONFIG_DIR = Path(__file__).resolve().parent.parent / "config"
 
 NUMBER_RE = re.compile(r"\$?\d[\d,]*(?:\.\d+)?\s?(?:%|[kKmMbB]\b|x\b)?")
-SENTENCE_RE = re.compile(r"[^.!?]+[.!?]+")
+# A sentence ends at . ! or ? followed by whitespace or the end, so "1.5%" isn't split in two.
+SENTENCE_RE = re.compile(r"\S.*?[.!?]+(?=\s|$)", re.S)
 CAPITALIZED_RE = re.compile(r"\b[A-Z][A-Za-z0-9+#.&-]*[A-Za-z0-9+#]\b")
 
 

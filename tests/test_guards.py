@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from tailor.guards import check_cover_letter, check_resume, new_capitalized_terms, new_numbers
+from tailor.guards import SENTENCE_RE, check_cover_letter, check_resume, new_capitalized_terms, new_numbers
 
 EXAMPLES = Path(__file__).resolve().parent.parent / "examples"
 RESUME = (EXAMPLES / "sample_resume.txt").read_text()
@@ -65,3 +65,7 @@ def test_cover_letter_length_and_opening_rules():
     short = "I am writing to apply. I like data. Thanks."
     problems = " ".join(check_cover_letter(short, RESUME, JD, "").problems)
     assert "7 to 9" in problems and "I am writing" in problems
+
+
+def test_decimal_does_not_split_a_sentence():
+    assert len(SENTENCE_RE.findall("I found a -1.5% margin. Could we talk?")) == 2
