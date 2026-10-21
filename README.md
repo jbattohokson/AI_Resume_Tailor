@@ -4,6 +4,9 @@ Tailors a resume and writes a cover letter for each job description, then fact-c
 
 Built with [CrewAI](https://docs.crewai.com). Runs free on a local model through Ollama. Switching to Claude is one line in `.env`.
 
+
+**Write-up:** [`AI_Resume_Tailor.html`](AI_Resume_Tailor.html) (also `docs/AI_Resume_Tailor_Report.pdf`) walks through the real runs, what the checks caught and what they missed.
+
 ## Why the fact checker isn't another agent
 
 Small free models are good at rewording and bad at not making things up. A second agent reviewing the first one shares the same blind spots. So the checks that matter are deterministic:

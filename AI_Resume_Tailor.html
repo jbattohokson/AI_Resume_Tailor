@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Resume Tailor</title>
+<style>
+  :root{--ink:#0f1117;--ink-light:#4a4f5e;--border:#dde1ea;--bg:#f7f8fc;--white:#ffffff;--accent:#1a56db;--accent-dim:#e8eefb;--warn:#c0392b;--warn-dim:#fdf0ee;--green:#1a7f4b;--green-dim:#eaf5ef;--amber:#b45309;--amber-dim:#fef3e2;--mono:'Courier New',Courier,monospace}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:'Georgia',serif;font-size:16px;line-height:1.7;color:var(--ink);background:var(--bg)}
+  a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+  .page-wrap{max-width:860px;margin:0 auto;padding:0 24px 80px}
+  header{background:#0f1117;color:var(--white);padding:56px 0 44px}
+  header .page-wrap{padding-top:0;padding-bottom:0}
+  .eyebrow{font-family:'Arial',sans-serif;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#8b93a8;margin-bottom:14px}
+  h1{font-size:clamp(24px,4vw,38px);font-weight:normal;line-height:1.2;letter-spacing:-.02em;margin-bottom:18px}
+  h1 em{font-style:italic;color:#8b93a8}
+  .meta{font-family:'Arial',sans-serif;font-size:13px;color:#8b93a8;display:flex;flex-wrap:wrap;gap:20px}
+  .meta span::before{content:'· '}
+  .sticky-nav{position:sticky;top:0;background:var(--white);border-bottom:1px solid var(--border);z-index:100;padding:10px 0}
+  .sticky-nav .page-wrap{display:flex;gap:24px;flex-wrap:wrap;padding-top:0;padding-bottom:0}
+  .sticky-nav a{font-family:'Arial',sans-serif;font-size:12.5px;color:var(--ink-light);font-weight:500}
+  .sticky-nav a:hover{color:var(--accent);text-decoration:none}
+  .exec-summary{background:var(--white);border:1px solid var(--border);border-left:4px solid var(--accent);padding:28px 32px;margin:40px 0 48px;border-radius:0 6px 6px 0}
+  .exec-summary h2{font-family:'Arial',sans-serif;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+  .exec-summary p{font-size:15.5px;margin-bottom:10px}
+  .exec-summary p:last-child{margin-bottom:0}
+  .kpi-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:16px;margin-bottom:56px}
+  .kpi{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:20px 18px;text-align:center}
+  .kpi .num{font-size:26px;font-weight:700;font-family:'Arial',sans-serif;letter-spacing:-.03em;line-height:1;margin-bottom:6px}
+  .kpi .num.warn{color:var(--warn)}.kpi .num.good{color:var(--green)}.kpi .num.amber{color:var(--amber)}.kpi .num.blue{color:var(--accent)}
+  .kpi .label{font-family:'Arial',sans-serif;font-size:11.5px;color:var(--ink-light);line-height:1.4}
+  .section{margin-bottom:56px}
+  .section-label{font-family:'Arial',sans-serif;font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-light);margin-bottom:6px}
+  h2.section-title{font-size:22px;font-weight:normal;letter-spacing:-.01em;margin-bottom:22px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+  .finding{background:var(--white);border:1px solid var(--border);border-radius:8px;margin-bottom:20px;overflow:hidden}
+  .finding-header{display:flex;align-items:flex-start;gap:16px;padding:22px 24px 18px;border-bottom:1px solid var(--border)}
+  .finding-number{font-family:'Arial',sans-serif;font-size:11px;font-weight:700;color:var(--white);background:var(--ink);border-radius:4px;padding:3px 7px;flex-shrink:0;margin-top:2px}
+  .finding-title{font-size:16.5px;font-weight:normal;line-height:1.35}
+  .finding-body{padding:20px 24px}
+  .finding-body p{font-size:14.5px;margin-bottom:12px}
+  .finding-body p:last-child{margin-bottom:0}
+  .finding-body img{width:100%;height:auto;border:1px solid var(--border);border-radius:6px;margin:6px 0 14px;background:#fff}
+  .impact-block{border-radius:6px;padding:16px 18px;margin-top:14px;margin-bottom:14px}
+  .impact-block.red{background:var(--warn-dim);border-left:3px solid var(--warn)}
+  .impact-block.green{background:var(--green-dim);border-left:3px solid var(--green)}
+  .impact-block.amber{background:var(--amber-dim);border-left:3px solid var(--amber)}
+  .impact-block.blue{background:var(--accent-dim);border-left:3px solid var(--accent)}
+  .impact-label{font-family:'Arial',sans-serif;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px}
+  .impact-block.red .impact-label{color:var(--warn)}.impact-block.green .impact-label{color:var(--green)}
+  .impact-block.amber .impact-label{color:var(--amber)}.impact-block.blue .impact-label{color:var(--accent)}
+  .impact-block p{font-size:14px;line-height:1.6;margin:0}
+  .data-table-wrap{overflow-x:auto;margin:16px 0}
+  table{width:100%;border-collapse:collapse;font-family:'Arial',sans-serif;font-size:13px}
+  th{background:var(--ink);color:var(--white);text-align:left;padding:9px 12px;font-weight:600;font-size:12px;letter-spacing:.04em}
+  td{padding:9px 12px;border-bottom:1px solid var(--border)}
+  tr:last-child td{border-bottom:none}
+  tr:nth-child(even) td{background:var(--bg)}
+  .neg{color:var(--warn);font-weight:700}.pos{color:var(--green);font-weight:700}
+  .rec-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+  .rec-card{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:20px}
+  .rec-priority{font-family:'Arial',sans-serif;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px}
+  .rec-priority.p1{color:var(--warn)}.rec-priority.p2{color:var(--amber)}.rec-priority.p3{color:var(--accent)}
+  .rec-card h3{font-size:15px;font-weight:normal;margin-bottom:10px;line-height:1.3}
+  .rec-card p{font-size:13.5px;color:var(--ink-light);line-height:1.6;margin-bottom:10px}
+  .rec-card p:last-child{margin-bottom:0}
+  .rec-impact{font-family:var(--mono);font-size:12px;background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:8px 10px;color:var(--ink);margin-top:10px}
+  pre{font-family:var(--mono);font-size:12px;background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:14px 16px;overflow-x:auto;line-height:1.55;white-space:pre-wrap}
+  footer{border-top:1px solid var(--border);padding-top:28px;margin-top:64px;font-family:'Arial',sans-serif;font-size:12.5px;color:var(--ink-light);display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
+  @media print{.kpi,.rec-card,.impact-block,img,tr,.exec-summary{break-inside:avoid}.finding-header{break-after:avoid}}
+  @media(max-width:600px){.exec-summary{padding:20px 18px}.finding-header,.finding-body{padding:16px}}
+  .model-stat{display:inline-block;font-family:var(--mono);font-size:12px;background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:4px 10px;margin:3px 4px 3px 0}
+</style>
+</head>
+<body>
+<header><div class="page-wrap"><p class="eyebrow">AI Agents · Career Tools</p>
+<h1>A free AI that tailors resumes, and code that checks it.<br><em>Real runs on Brex and BILL postings, mistakes included.</em></h1>
+<div class="meta"><span>Julian Batto-Hokson</span><span>5 real runs · 3 real job postings</span><span>Python · CrewAI · Ollama · pytest</span><span>October 2026</span></div></div></header>
+<nav class="sticky-nav"><div class="page-wrap"><a href="#summary">Summary</a><a href="#findings">Real Runs</a><a href="#how">Design</a><a href="#data">Setup</a></div></nav>
+<div class="page-wrap">
+<div class="status-banner" style="margin-top:32px;background:var(--amber-dim);border:1px solid var(--amber);border-radius:6px;padding:14px 18px;font-family:Arial,sans-serif;font-size:13px;color:var(--amber)"><strong>Scope note:</strong> the job postings are real (Brex and BILL, retrieved 2026-10-20 and summarized in my own words). The resume is a fictional candidate, so no real person's history is in the repo. Every output below is real and unedited.</div>
+<section id="summary" class="exec-summary">
+  <h2>Executive Summary</h2>
+  <p>Free local models are good at rewording and bad at not making things up. Instead of asking a second AI to review the first one, this tool wraps a CrewAI crew (job description analyst, resume editor, cover letter writer) in plain Python checks. A draft that invents a number, adds a skill you can't defend, slips in a banned word or misses the cover letter's 7-to-9-sentence shape goes back to the model with the exact problems listed. After two failed retries it's saved marked FLAGGED instead of passing quietly.</p>
+  <p>I ran it five times with qwen2.5 (7B) on three real postings. All three resumes passed on the first attempt. Both cover letters were flagged after three attempts, one for inventing a "50%" improvement. Those runs also exposed three gaps in my own checks, which I fixed and covered with tests.</p>
+</section>
+<div class="kpi-strip"><div class="kpi"><div class="num good">3 / 3</div><div class="label">Resumes passed every check on attempt 1</div></div><div class="kpi"><div class="num warn">2 / 2</div><div class="label">Cover letters flagged, not passed off as done</div></div><div class="kpi"><div class="num blue">3</div><div class="label">Guard gaps found in real runs and fixed</div></div><div class="kpi"><div class="num blue">17</div><div class="label">Offline tests, no model needed</div></div><div class="kpi"><div class="num amber">3 to 6 min</div><div class="label">Per draft on 2 CPUs, $0 model cost</div></div></div>
+
+<section id="findings" class="section">
+  <p class="section-label">Real Runs</p>
+  <h2 class="section-title">What a free 7B model did with real postings</h2>
+  <div class="data-table-wrap"><table><thead><tr><th>Posting</th><th>Output</th><th>Result</th><th>What happened</th></tr></thead><tbody>
+  <tr><td>Brex, Data Analyst II</td><td>Resume</td><td><span class="pos">Passed, 1 try</span></td><td>One edit: "exports 4 Tableau views" → "exports 4 dashboards", matching the posting</td></tr>
+  <tr><td>BILL, Risk Data Analyst</td><td>Resume</td><td><span class="pos">Passed, 1 try</span></td><td>Reordered and reworded a bullet; its change log misdescribed the edit</td></tr>
+  <tr><td>BILL, Business Development Rep</td><td>Resume</td><td><span class="pos">Passed, 1 try</span></td><td>No edits, and correctly didn't add Salesforce or ZoomInfo, which the candidate never listed</td></tr>
+  <tr><td>Brex, Data Analyst II</td><td>Cover letter</td><td><span class="neg">Flagged, 3 tries</span></td><td>11 sentences; invented "50%" (the real 3-days-to-1 cut is 67%)</td></tr>
+  <tr><td>BILL, Risk Data Analyst</td><td>Cover letter</td><td><span class="neg">Flagged, 3 tries</span></td><td>11 sentences, "leveraging", and "[Company Name]" left in</td></tr>
+  </tbody></table></div>
+
+  <div class="finding"><div class="finding-header"><span class="finding-number">01</span><span class="finding-title">The guards kept an invented metric from passing</span></div><div class="finding-body">
+  <p>The final Brex cover letter claimed the candidate "improved lead follow-up efficiency by 50%". The resume says follow-up went from 3 days to 1 day. The model made up a number, and the number was wrong. The check compares every figure in the draft against the resume, job description and notes, so the letter failed and, after the last retry, was saved as FLAGGED.</p>
+  <pre>Dear Hiring Manager,
+
+I am excited to apply for the position of Data Analyst at your company. As an economics graduate with a strong background in building data pipelines and transforming messy data into actionable insights, I am eager to contribute to your team.
+
+In my project &quot;Retail Margin Analysis,&quot; I utilized Python, SQL, and Tableau to analyze retail data over 84 weeks, uncovering a -1.5% gross margin on US bike sales. This analysis helped identify key trends and inefficiencies, enabling more informed decision-making.
+
+At Bayside Motors, I improved lead follow-up efficiency by 50% through the development of a call-back tracker in Google Sheets, reducing follow-up time from 3 days to 1 day. This streamlined process directly contributed to a 14 vehicle sale average per month.
+
+I am particularly interested in creating self-service data tools that empower business teams to track their ...</pre>
+  <div class="impact-block green"><p class="impact-label">Why code, not another agent</p><p>A second model reviewing the first shares its blind spots. A set difference between the numbers in the draft and the numbers in your sources doesn't.</p></div>
+  </div></div>
+
+  <div class="finding"><div class="finding-header"><span class="finding-number">02</span><span class="finding-title">Real runs found three holes in my own checks</span></div><div class="finding-body">
+  <div class="data-table-wrap"><table><thead><tr><th>What slipped through</th><th>Fix</th></tr></thead><tbody>
+  <tr><td>A change log describing an edit the resume never got. It passed every check.</td><td>Each logged <code>New: "..."</code> edit must appear in the resume body</td></tr>
+  <tr><td>"leveraging" got past a banned list that contains "leverage"</td><td>Single banned words now match on their stem</td></tr>
+  <tr><td>"[Company Name]" placeholders in a finished letter</td><td>Bracketed placeholders are rejected</td></tr>
+  </tbody></table></div>
+  <p>Each fix has a test built from the real output that exposed it. The original change-log failure is kept in <code>docs/found_in_testing/</code>.</p>
+  <div class="impact-block amber"><p class="impact-label">Still not caught</p><p>Change logs written in another format, generic openings like "I am excited to apply", and letters that never name the company. These are listed in the README's limits, not hidden.</p></div>
+  </div></div>
+
+  <div class="finding"><div class="finding-header"><span class="finding-number">03</span><span class="finding-title">A 7B model edits very conservatively</span></div><div class="finding-body">
+  <p>Across three resumes it made one real keyword edit. That's safe (nothing was fabricated), but it means the tool adds less value on a small model than on a stronger one. Switching to Claude is one line in <code>.env</code>; the checks don't change, so a stronger model just fails them less often.</p>
+  </div></div>
+</section>
+
+<section id="how" class="section">
+  <p class="section-label">Design</p>
+  <h2 class="section-title">How it works</h2>
+  <pre>Resume mode:   JD Analyst ──> Resume Editor ──> guards ──┬─ pass ──> output/&lt;job&gt;_resume.txt
+                                                         └─ fail ──> retry with the exact problems (max 2), then FLAGGED
+Cover mode:    Hook Finder ──> Letter Writer ──> guards ──> output/&lt;job&gt;_cover.txt</pre>
+  <div class="data-table-wrap"><table><thead><tr><th>Check</th><th>What it catches</th></tr></thead><tbody>
+  <tr><td>New numbers</td><td>Any figure not in the resume (or, for letters, the job description and notes)</td></tr>
+  <tr><td>Blocked claims</td><td>Skills on your "can't defend this" list that the draft adds</td></tr>
+  <tr><td>New names</td><td>Tools or companies mid-sentence that appear in neither the resume nor the posting</td></tr>
+  <tr><td>Change log</td><td>Logged edits missing from the resume</td></tr>
+  <tr><td>Style</td><td>Em dashes, banned words and their variants, placeholders, code fences</td></tr>
+  <tr><td>Letter shape</td><td>7 to 9 sentences, no "I am writing...", no exclamation points</td></tr>
+  </tbody></table></div>
+</section>
+
+<section id="data" class="section">
+  <p class="section-label">Technical Reference</p>
+  <h2 class="section-title">Setup and scope</h2>
+  <div class="data-table-wrap"><table><thead><tr><th>Dimension</th><th>Value</th></tr></thead><tbody>
+  <tr><td>Framework</td><td>CrewAI, sequential crews, one per mode</td></tr>
+  <tr><td>Model</td><td>Ollama qwen2.5:7b by default (free, local); Claude via one env var</td></tr>
+  <tr><td>Inputs</td><td>Real public postings (Brex, BILL) summarized with source links; a fictional resume</td></tr>
+  <tr><td>Testing</td><td>17 offline pytest tests with a scripted fake model; 5 real runs saved unedited</td></tr>
+  <tr><td>Tools</td><td>Python, CrewAI, Ollama, pytest</td></tr>
+  </tbody></table></div>
+</section>
+</div>
+<footer style="max-width:860px;margin:0 auto;padding:0 24px 48px"><span>Julian Batto-Hokson · October 2026</span><span><a href="https://github.com/jbattohokson/AI_Resume_Tailor">GitHub Repository</a> · CrewAI · Ollama</span></footer>
+</body></html>
