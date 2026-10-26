@@ -2,7 +2,7 @@ Dear Hiring Manager,
 
 I am excited to apply for the position of Data Analyst at your company. As an economics graduate with a strong background in building data pipelines and transforming messy data into actionable insights, I am eager to contribute to your team.
 
-In my project "Retail Margin Analysis," I utilized Python, SQL, and Tableau to analyze retail data over 84 weeks, uncovering a -1.5% gross margin on US bike sales. This analysis helped identify key trends and inefficiencies, enabling more informed decision-making.
+In my project "Retail Margin Analysis," I utilized Python, SQL, and Tableau to analyze retail data over 84 weeks, uncovering a -1.7% gross margin on US bike sales. This analysis helped identify key trends and inefficiencies, enabling more informed decision-making.
 
 At Bayside Motors, I improved lead follow-up efficiency by 50% through the development of a call-back tracker in Google Sheets, reducing follow-up time from 3 days to 1 day. This streamlined process directly contributed to a 14 vehicle sale average per month.
 

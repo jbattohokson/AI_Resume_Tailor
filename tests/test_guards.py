@@ -62,7 +62,7 @@ def test_numbers_keep_formatting_variants_equal():
 
 GOOD_LETTER = (
     "Acme moved sales reporting into a shared Tableau workbook this year. That is the kind of work I want to do. "
-    "In a retail project I found a -1.5% gross margin on US bike sales. "
+    "In a retail project I found a -1.7% gross margin on US bike sales. "
     "I built a 3-step pipeline that fed 4 Tableau views. "
     "At Bayside Motors I cut follow-up time from 3 days to 1 day. "
     "I did it with a tracker the whole team used. "
@@ -98,4 +98,4 @@ def test_stem_matching_does_not_flag_unrelated_words():
     assert banned_words_in("a landscaping crew") == ["landscape"]
 
 def test_decimal_does_not_split_a_sentence():
-    assert len(SENTENCE_RE.findall("I found a -1.5% margin. Could we talk?")) == 2
+    assert len(SENTENCE_RE.findall("I found a -1.7% margin. Could we talk?")) == 2

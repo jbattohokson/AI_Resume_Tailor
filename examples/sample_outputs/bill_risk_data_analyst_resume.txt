@@ -15,7 +15,7 @@ Sales Associate, Bayside Motors | June 2024 to May 2026
 PROJECTS
 Retail Margin Analysis | Python, SQL, Tableau
 - Built a 3-step pipeline that reshapes weekly data, filters it in SQL & exports 4 Tableau views
-- Analyzed US bike sales across 84 weeks of retail data to find a -1.5% gross margin
+- Analyzed US bike sales across 84 weeks of retail data to find a -1.7% gross margin
 
 SKILLS
 Python (pandas), SQL, Tableau, Google Sheets, DuckDB
