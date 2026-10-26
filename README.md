@@ -104,6 +104,10 @@ The tests swap in a scripted fake model, so they run offline in under a second. 
 - The cover letter can only be as specific as your notes file. The agents don't browse the web.
 - Local 7B models are slower and make more first-draft mistakes than Claude. Expect more retries.
 
+## About
+
+Tailors a resume and cover letter to each job description with CrewAI, then fact-checks every draft in plain Python so the model can't invent metrics, add tools you don't have or use banned words. Runs free on a local Ollama model. Python.
+
 ## License
 
 MIT (see `LICENSE`).
